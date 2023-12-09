@@ -1,30 +1,15 @@
 const express = require('express');
-const app = express();
-const PORT = 8080;
+const router = express.Router();
 
-// init morgan
-const morgan = require('morgan');
-app.use(morgan('dev'));
-
-// init body-parser
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
-
-// init cors
-const cors = require('cors');
-app.use(cors());
-
-// init db client
-const client = require('./db/client');
-client.connect();
-
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+// GET /api/health
+router.get('/health', (req, res, next) => {
+    res.send('OK');
 });
 
-// Router: /api
-app.use('/api', require('./api'));
+// ROUTER: /api/video-games
+router.use('/video-games', require('./videoGames'));
 
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+// ROUTER: /api/board-games
+router.use('/board-games', require('./boardGames'));
+
+module.exports = router;
